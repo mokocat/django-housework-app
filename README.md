@@ -125,7 +125,7 @@
 ## This app test specification is in the following directory.
 - django-housework-app\housework-app\django-uwsgi-nginx\app\doc
 
-    - test_item.xlsx: test item
+    - test_item.csv: test item
 
 # Note
 - This page is subject to be inaccessible or change without notice for maintenance.
