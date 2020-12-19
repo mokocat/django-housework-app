@@ -1,0 +1,47 @@
+CookingAppテスト項目書,,,,,,,,,,
+,,,,,,,,,,
+unit test,,,,,,,,,,
+項番,機能,画面,処理,期待結果,Test method,Table(todo_),C,R,U,D
+1,Shopping list,買物リスト,Itemを登録する,登録したItemの内容が表示される,-,shoppingitem,〇,〇,,
+2,,,Itemを編集する,編集したItemの内容に変更される,-,shoppingitem,,〇,〇,
+3,,,Itemを削除する,選択したItemが削除される,-,shoppingitem,,〇,,〇
+4,,,Itemのレをクリックする,選択したItemのStatusがCompleteに変更される,-,shoppingitem,,〇,〇,
+5,,,過去日付でItemを登録し、再読み込みする,Itemが本日の日付に変更される,-,shoppingitem,,〇,〇,
+6,,,過去日付でItemを登録し、Completeに変更後、再読み込みする,Itemが自動で削除される,-,shoppingitem,,〇,,〇
+7,,店・買物写真登録,Shopを登録する,登録したShop名が表示される、登録ユーザ以外のShop名は表示されない,test_create_shop,shop,〇,〇,,
+8,,,Shopを削除する,選択したShopがDBから削除される（DBの数が1つ減る）,test_delete_shop,shop,,〇,,〇
+9,,,Pictureを登録する,登録したPictureがDBに登録される,test_create_shopping_item_picture,shoppingitempicture,〇,〇,,
+10,,,Pictureを削除する,選択したPictureが削除される（DBの数が1つ減る）,test_delete_shopping_item_picture,shoppingitempicture,,〇,,〇
+11,Recipe collection,レシピ一覧,Recipeを登録する,登録したRecipeの内容がDBに登録される,test_create_recipe,recipe,〇,〇,,
+12,,,Recipeを編集する,編集したRecipeの内容にDBが変更される,test_update_recipe,recipe,,〇,〇,
+13,,,Recipeを削除する,選択したRecipeが削除される（DBの数が1つ減る）,test_delete_recipe,recipe,,〇,,〇
+14,,,RecipeのURLをクリックする,登録したRecipeのリンクページが表示される,-,recipe,,〇,,
+15,,,RecipeのPDFをクリックする,登録したRecipeのPDFが表示される,-,recipe,,〇,,
+16,,,レシピ名の一部を入力してレシピ名で検索をクリックする,入力したワードを含むレシピが表示される,test_search_recipe_by_recipe_name,recipe,,〇,,
+17,,,材料名を入力して材料で検索をクリックする,入力した材料が登録されているレシピが表示される,test_search_recipe_by_ingredient,recipe,,〇,,
+18,,,カテゴリ名を入力して、カテゴリで検索をクリックする,入力したカテゴリが登録されているレシピが表示される,search_recipe_by_category,recipe,,〇,,
+19,,カテゴリ・材料登録,Categoryを登録する,登録したCategory名が表示される、登録ユーザ以外のCategory名は表示されない,test_create_category,recipe_category,〇,〇,,
+20,,,Categoryを削除する,選択したCategoryが削除される,test_delete_category,recipe_category,,〇,,〇
+21,,,Categoryを編集する,編集したCategoryの内容にDBが変更される,test_update_category,recipe_category,,,〇,
+22,,,Ingredientを登録する,登録したIngredientが表示される、登録ユーザ以外のIngredientは表示されない,test_create_recipe_ingredient,recipe_ingredient,〇,〇,,
+23,,,Ingredientを削除する,選択したIngredientが削除される,test_delete_ingredient,recipe_ingredient,,〇,,〇
+24,,レシピ一覧/献立一覧,献立登録をクリックし、日付を選択して登録する,献立一覧画面に遷移し、選択した日付でレシピが登録される,test_create_meal_plan_from_recipe,mealplan,〇,〇,,
+25,Meal plan,献立一覧,Mealを登録する,登録したMealの内容が表示される,test_create_meal_plan,meal_plan,〇,〇,,
+26,,,Mealを編集する,編集したMealの内容に変更される,test_update_meal_plan,meal_plan,,〇,〇,
+27,,,Mealを削除する,選択したMealが削除される,test_delete_meal_plan,meal_plan,,〇,,〇
+,,,,,,,,,,
+GUI test,,,,,,,,,,
+項番,機能,画面,処理,期待結果,test_gui #,Table(todo_),C,R,U,D
+1,ログイン,Login,ユーザ名、パスワードを入力してログインする,Top Page画面に遷移する,# Login app site,-,,〇,,
+2,,Top Page,Navbarの買物リストをクリックする,買物リスト画面に遷移する,# Access to shopping list page,-,,〇,,
+3,Shopping list,買物リスト,買物リスト画面に表示されているテーブルのItem名を確認する,Item1が登録されている,# Check shopping item,shoppingitem,,〇,,
+4,,店・買物写真登録,Shopを登録する,登録したShop名が表示される,# Create shop,shop/shoppingitempicture,〇,〇,,
+5,,,Pictureを登録する,登録したPictureが表示される,# Create picture,shop/shoppingitempicture,〇,〇,,
+6,,買物リスト,新規にItemを登録する,新規に登録したItem名が表示される,# Create shopping item　,shoppingitem,〇,〇,,
+7,,買物リスト,登録したItemの編集をクリックし、新規に登録したShop、Pictureを選択する,ItemのShop、Pictureが編集したものに更新される,# Update shopping item,shoppingitem,,〇,〇,
+8,Recipe collection,カテゴリ・材料登録,Categoryを登録する,登録したCategory名が表示される,# Create category　,recipe_category,〇,〇,,
+9,,カテゴリ・材料登録,Ingredientを登録する,登録したIngredientが表示される,# Create ingredient,recipe_ingredient,〇,〇,,
+10,,レシピ一覧,Recipeを前項で登録したCategory、Ingredientを選択し、URLと一緒に登録する,登録したRecipeの内容が表示される、URLのリンクが張られる,# Create Recipe,recipe,〇,〇,,
+11,,レシピ一覧,前項で登録したIngredientで検索する,検索したIngredientのRecipeが表示される,# Search Recipe,recipe,,〇,,
+12,,レシピ一覧/献立一覧,検索されたRecipeを献立登録する,Recipeが登録したCategory、日付で登録される、Recipeに登録したリンクが張られる,# Create meal plan,mealplan,〇,〇,,
+13,Meal plan,献立一覧,前項で登録したMealを編集し、カテゴリーを変更する,編集したMealのカテゴリーが変更されて表示される,# Update meal plan,mealplan,,〇,〇,

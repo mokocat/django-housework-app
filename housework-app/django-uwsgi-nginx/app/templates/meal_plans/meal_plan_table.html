@@ -1,0 +1,28 @@
+<!-- Meal Plan Table -->
+<tr class="table_body">
+    <th scope="row" id="{{ category_label }}">{{ category_label }}</th>
+    {% for schedules in week_day_schedules.values %}
+        <td>
+            {% for s in schedules %}
+                {% for category in s.categories.all %}
+                    {% if category.category_name == category_label %}
+                        <div id="{{ s.meal_plan_date|date:"Y-m-d" }}_{{ category.category_name }}"
+                             class="update-meal_plan rounded btn-light shadow p-1 mb-1">
+                            {% if s.recipe.recipe_url %}
+                                <a href={{ s.recipe.recipe_url }} target="_blank"><span
+                                        class="fa fa-pencil">{{ s.meal_plan_name }}</span></a>
+                            {% elif s.recipe.recipe_file %}
+                                <a href={{ s.recipe.recipe_file.url }} target="_blank"><span
+                                        class="fa fa-pencil">{{ s.meal_plan_name }}</span></a>
+                            {% else %}
+                                {{ s.meal_plan_name }}
+                            {% endif %}
+                            <img class="update-meal_plan" src="/static/img/edit.png" style="max-height:15px"
+                                 data-id="{% url 'update_meal_plan' s.pk %}"/>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        </td>
+    {% endfor %}
+</tr>

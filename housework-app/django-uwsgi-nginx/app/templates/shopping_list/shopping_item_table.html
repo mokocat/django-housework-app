@@ -1,0 +1,14 @@
+<!-- Shopping Item Table Module -->
+<td :id="item.id + '-check'" @click="changeStatus(item)"><img src="/static/img/check.png" style="max-height:20px"/></td>
+<td :id="item.id + '-item'" v-text="item.item"></td>
+<td :id="item.id + '-date'" v-text="item.shopping_item_date"></td>
+<td :id="item.id + '-shop'" v-if="item.shop_name" v-text="item.shop_name"></td>
+<td :id="item.id + '-shop'" v-else>-</td>
+<td :id="item.id + '-picture'" v-if="item.picture_url"><img :src="'/media/' + [[ item.picture_url ]]"
+                                                            style="max-height:80px"/></td>
+<td :id="item.id + '-picture'" v-else>-</td>
+<td :id="item.id + '-edit'" v-if={{ editable }}>-</td>
+<td :id="item.id + '-edit'" v-else @click="item.edit = true"><img src="/static/img/edit.png" style="max-height:20px"/>
+</td>
+<td :id="item.id + '-delete'" @click="deleteItem(item, index)"><img src="/static/img/delete.png"
+                                                                    style="max-height:20px"/></td>

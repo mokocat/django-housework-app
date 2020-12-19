@@ -1,0 +1,232 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}買物リスト{% endblock %}
+{% block header %}買物リスト{% endblock header %}
+{% block content %}
+
+    <div id="shopping_list">
+        <!-- Create Shopping Item Form -->
+        <form class="form-row" @submit.prevent="addItem">
+            <div class="col-auto">
+                <input class="form-control" type="text" id="item" v-model="new_item" placeholder="買物アイテム"
+                       autocomplete="off">
+            </div>
+            <div class="col-auto">
+                <input class="form-control" type="date" id="shopping_item_date" v-model="its_date">
+            </div>
+            <div class="col-auto">
+                <button id="item_save_btn" class="btn save_btn" type="submit">Save</button>
+            </div>
+        </form>
+        <br>
+
+        <!-- Shopping Item Table -->
+        <table class="table table-striped table-borderless text-center">
+            <thead>
+            <tr>
+                <th>レ</th>
+                <th>買物リスト</th>
+                <th>日付</th>
+                <th>お店</th>
+                <th>写真</th>
+                <th>編集</th>
+                <th>削除</th>
+            </tr>
+            </thead>
+            <tbody class="">
+            <template v-cloak v-for="(item, index) in all_items">
+                <tr class="table-active" v-if="item.completed" style="text-decoration: line-through">
+                    {% include "shopping_list/shopping_item_table.html" with editable='true' %}
+                </tr>
+                <tr v-else-if="!(item.edit)">
+                    {% include "shopping_list/shopping_item_table.html" with editable='false' %}
+                </tr>
+                <tr v-else class="form-group">
+                    <td :id="item.id + '-check'"><img src="/static/img/check.png" style="max-height:20px"/></td>
+                    <td :id="item.id + '-item'"><input class="form-control" type="text" v-model="item.item"></td>
+                    <td :id="item.id + '-date'"><input class="form-control" type="date"
+                                                       v-model="item.shopping_item_date">
+                    </td>
+                    <td :id="item.id + '-shop'">
+                        <select class="form-control" id="exampleFormControlSelect1" name="select_shop"
+                                v-model="item.shop_name">
+                            <option v-for="shop in shops" :value="shop.shop_name">[[ shop.shop_name ]]</option>
+                        </select>
+                    </td>
+                    <td :id="item.id + '-picture'">
+                        <select class="form-control" id="exampleFormControlSelect1" name="select_picture"
+                                v-model="'/media/' + item.picture_url">
+                            <option v-for="picture in pictures" :value="picture.picture"
+                                    :name="picture.shopping_item_picture_name">
+                                [[ picture.shopping_item_picture_name ]]
+                            </option>
+                        </select>
+                    </td>
+                    <td :id="item.id + '-edit'" @click="item.edit = false; edit(item)"><img src="/static/img/edit.png"
+                                                                                            style="max-height:20px"/>
+                    </td>
+                    <td :id="item.id + '-delete'" @click="deleteItem(item, index)"><img src="/static/img/delete.png"
+                                                                                        style="max-height:20px"/></td>
+                </tr>
+            </template>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        Vue.directive('focus', {
+            inserted: function (el) {
+                el.focus()
+            }
+        })
+        var vm = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#shopping_list',
+            data: {
+                all_items: [],
+                shops: [],
+                pictures: [],
+                new_item: "",
+                its_date: moment(new Date().toLocaleString()).format('YYYY-MM-DD'),
+            },
+            mounted: function () {
+                axios.get(`{% url "get_shopping_item" %}`)
+                    .then(
+                        function (response) {
+                            vm.getAllLists(response)
+                        }
+                    )
+                    .catch(function (error) {
+                        console.log(error);
+                    })
+                    .then(function () {
+                    });
+            },
+            methods: {
+                getAllLists: function (response) {
+                    vm.all_items.length = 0;
+                    vm.shops.length = 0;
+                    vm.pictures.length = 0;
+                    for (var d in response.data.shops) {
+                        var shop = response.data.shops[d];
+                        vm.shops.push(shop);
+                    }
+                    for (var d in response.data.pictures) {
+                        var picture = response.data.pictures[d];
+                        vm.pictures.push(picture);
+                    }
+                    for (var d in response.data.all_items) {
+                        var item = response.data.all_items[d];
+                        item.shopping_item_date = moment(new Date(item.shopping_item_date)).format('YYYY-MM-DD');
+                        item['edit'] = false;
+
+                        if (item.shop_id) {
+                            shop_name = vm.shops.filter(function (i) {
+                                return i.id === item.shop_id;
+                            });
+                            item['shop_name'] = shop_name[0].shop_name;
+                        } else {
+                            item['shop_name'] = null;
+                        }
+                        if (item.shopping_item_picture_id) {
+                            picture_url = vm.pictures.filter(function (i) {
+                                return i.id === item.shopping_item_picture_id;
+                            });
+                            item['picture_url'] = picture_url[0].picture;
+                        } else {
+                            item['picture_url'] = null;
+                        }
+                        vm.all_items.push(item);
+                    }
+                },
+                changeStatus: function (item) {
+                    item.completed = !item.completed;
+                    this.updateDB(item)
+                },
+                addItem: function () {
+                    if (this.new_item && this.its_date) {
+                        item = {
+                            "item": this.new_item,
+                            "shopping_item_date": moment(new Date(this.its_date)).format('YYYY-MM-DD'),
+                            "completed": false
+                        };
+                        this.addDB(item);
+                    }
+                    this.new_item = "";
+                },
+                edit: function (item) {
+                    if (item.shop_name) {
+                        shop_obj = this.shops.filter(function (element) {
+                            return element.shop_name === item.shop_name;
+                        });
+                        item.shop_id = shop_obj[0].id;
+                    }
+                    if (item.picture_url) {
+                        picture_obj = this.pictures.filter(function (element) {
+                            return element.picture === item.picture_url;
+                        });
+                        item.shopping_item_picture_id = picture_obj[0].id;
+                    }
+                    this.updateDB(item)
+                },
+                deleteItem: function (item, index) {
+                    this.all_items.splice(index, 1);
+                    var delete_id = item.id;
+                    this.deleteDB(delete_id);
+                },
+                addDB: function (item) {
+                    csrftoken = Cookies.get('csrftoken');
+                    headers = {'X-CSRFToken': csrftoken};
+                    data = {
+                        "item": item.item,
+                        "shopping_item_date": moment(new Date(item.shopping_item_date)).format('YYYY-MM-DD'),
+                        "completed": item.completed,
+                    };
+                    axios.post('{% url 'post_update_shopping_item' %}', data, {headers: headers})
+                        .then(function (response) {
+                            vm.getAllLists(response);
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                updateDB: function (item) {
+                    csrftoken = Cookies.get('csrftoken');
+                    headers = {'X-CSRFToken': csrftoken};
+                    data = {
+                        "item_id": item.id,
+                        "item": item.item,
+                        "shopping_item_date": moment(new Date(item.shopping_item_date)).format('YYYY-MM-DD'),
+                        "completed": item.completed,
+                        "shop_id": item.shop_id,
+                        "picture_id": item.shopping_item_picture_id
+                    };
+                    axios.post('{% url 'post_update_shopping_item' %}', data, {headers: headers})
+                        .then(function (response) {
+                            vm.getAllLists(response);
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                },
+                deleteDB: function (delete_id) {
+                    csrftoken = Cookies.get('csrftoken');
+                    headers = {'X-CSRFToken': csrftoken};
+                    data = {
+                        "item_id": delete_id
+                    };
+                    axios.post('{% url 'post_delete_shopping_item' %}', data, {headers: headers})
+                        .then(function (response) {
+                            vm.getAllLists(response);
+                            console.log(response);
+                        })
+                        .catch(function (error) {
+                            console.log(error);
+                        });
+                }
+            }
+        })
+    </script>
+{% endblock content %}

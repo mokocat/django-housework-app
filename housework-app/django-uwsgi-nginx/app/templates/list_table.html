@@ -1,0 +1,19 @@
+{% if list_name %}
+    <table class="table table-bordered">
+        <tr class="table-primary text-center">
+            <th>{{ th_name }}</th>
+            <th>削除</th>
+        </tr>
+        {% for i in list_name %}
+            <tr class="table-info">
+                <td id="">
+                    <div class="bg-light rounded">{{ i.field_name }}</div>
+                </td>
+                <td id="">
+                    <button type="button" class="bg-light rounded"><a href="{% url url_name i.id %}"><span
+                            class="fa fa-pencil">×</span></a></button>
+                </td>
+            </tr>
+        {% endfor %}
+    </table>
+{% endif %}

@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+{% block title %}献立一覧{% endblock title %}
+{% block header %}献立一覧{% endblock header %}
+
+{% block content %}
+
+    <!-- Create Meal Plan Form -->
+    <form class="form-inline my-2 my-lg-0" method="POST">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-row">
+            <div class="col-auto">
+                <input type="search" name="meal_plan_name" class="form-control" id="exampleFormControlInput1"
+                       placeholder="献立を登録" autocomplete="off">
+            </div>
+            <div class="col-auto">
+                <input type="date" name="meal_plan_date" class="form-control" id="exampleFormControlInput1">
+            </div>
+            <div class="col-auto">
+                <select class="form-control" id="exampleFormControlSelect1" name="categories">
+                    {% for category in form.categories %}
+                        {{ category }}
+                        {{ category.errors }}
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <div class="col-auto">
+            <button class="btn save_btn" type="submit">Save</button>
+        </div>
+    </form><br>
+
+    {% include "modal_form.html" %}
+
+    <!-- Calender -->
+    <a href="{% url 'show_and_create_meal_plan' week_previous.year week_previous.month week_previous.day %}">前週</a>
+    {{ week_first | date:"Y年m月d日" }}〜{{ week_last | date:"Y年m月d日" }}
+    <a href="{% url 'show_and_create_meal_plan' week_next.year week_next.month week_next.day %}">次週</a>
+
+    <table class="table table-borderless">
+        <thead>
+        <tr class="text-center">
+            <th scope="row">Week</th>
+            {% for w in week_names %}
+                <th>{{ w }}</th>
+            {% endfor %}
+        </tr>
+        </thead>
+        <tbody>
+        <tr class="table_header text-center">
+            <th class="" scope="row">Day</th>
+            {% for day in week_days %}
+                {% if now == day %}
+                    <td class="table_today">
+                        {% else %}
+                    <td class="">
+                {% endif %}
+            {% if week_first.month != day.month %}
+                {{ day | date:"m/d" }}
+            {% else %}
+                {{ day.day }}
+            {% endif %}
+            </td>
+            {% endfor %}
+        </tr>
+        {% for category in form.categories %}
+            {% include "meal_plans/meal_plan_table.html" with category_label=category.choice_label %}
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        $(function () {
+            // Update book buttons
+            $(".update-meal_plan").each(function () {
+                $(this).modalForm({formURL: $(this).data('id')});
+            });
+        });
+        $('.datepicker').datepicker();
+    </script>
+
+{% endblock content %}

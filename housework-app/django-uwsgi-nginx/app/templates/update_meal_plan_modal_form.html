@@ -1,0 +1,44 @@
+{% load widget_tweaks %}
+
+<form method="post" action="" enctype="multipart/form-data" autocomplete="off">
+    {% csrf_token %}
+    <div class="modal-header">
+        <h3 class="modal-title">Update Form</h3>
+        <button type="button" class="bg-light rounded">
+            <a href="{% url 'delete_meal_plan' mealplan.id %}">
+                <span aria-hidden="true">Delete</span>
+            </a>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="{% if form.non_field_errors %}invalid{% endif %} mb-2">
+            {% for error in form.non_field_errors %}
+                {{ error }}
+            {% endfor %}
+        </div>
+
+        {% for field in form %}
+            <div class="form-group">
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+                {% render_field field class="form-control" placeholder=field.label %}
+                <div class="{% if field.errors %} invalid{% endif %}">
+                    {% for error in field.errors %}
+                        <p class="help-block">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="modal-footer">
+        <button type="button" class="btn btn-outline-secondary my-2 my-sm-0" data-dismiss="modal">Close</button>
+        <button id="update" class="btn save_btn" type="submit">Update</button>
+    </div>
+
+</form>
+
+<script type="text/javascript">
+    $('#id_meal_plan_date').attr('type', 'date');
+</script>
+

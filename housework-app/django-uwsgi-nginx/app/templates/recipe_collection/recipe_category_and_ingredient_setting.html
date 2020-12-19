@@ -1,0 +1,93 @@
+{% extends 'base.html' %}
+{% block title %}カテゴリ・材料登録{% endblock title %}
+{% block header %}レシピの材料・カテゴリ登録{% endblock header %}
+{% block content %}
+
+    <div style="display:inline-flex">
+        <!-- Create Category Form -->
+        <div class="search_form">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'create_recipe_category' %}">
+                {% csrf_token %}
+                <input id="category_name" class="form-control mr-sm-2" type="search" placeholder="カテゴリを登録"
+                       aria-label="Search" name="category_name" autocomplete="off">
+                <button id="category_save_btn" class="btn save_btn" type="submit">Save</button>
+            </form>
+        </div>
+        <!-- Create Ingredient Form -->
+        <div class="search_form">
+            <form class="form-inline my-2 my-lg-0" method="POST" action="{% url 'create_recipe_ingredient' %}">
+                {% csrf_token %}
+                <input id="ingredient_name" class="form-control mr-sm-2" type="search" placeholder="材料を登録"
+                       aria-label="Search" name="ingredient_name" autocomplete="off">
+                <button id="ingredient_save_btn" class="btn save_btn" type="submit">Save</button>
+            </form>
+            <br>
+        </div>
+    </div>
+
+    {% include "modal_form.html" %}
+
+    <!-- Category Table -->
+
+    <p>カテゴリテーブル</p>
+    {% if categories %}
+        <table class="table table-striped table-borderless text-center">
+            <thead>
+            <tr>
+                <th>献立表示順</th>
+                <th>カテゴリー</th>
+                <th>編集</th>
+                <th>削除</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in categories %}
+                <tr class="">
+                    <td id="{{ i.id }}-priority">{{ i.priority }}</td>
+                    <td id="{{ i.id }}-category_name">{{ i.category_name }}</td>
+                    <td id="{{ i.id }}-update_category" class="update-category"
+                        data-id="{% url 'update_recipe_category' i.pk %}">
+                        <img src="/static/img/edit.png" style="max-height:20px"/>
+                    </td>
+                    <td id="{{ i.id }}-delete_category">
+                        <a href="{% url 'delete_category' i.id %}"><img src="/static/img/delete.png"
+                                                                        style="max-height:20px"/></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <!-- Ingredient Table -->
+    <p>材料リストテーブル</p>
+    {% if ingredients %}
+        <table class="table table-striped table-borderless text-center">
+            <thead>
+            <tr class="">
+                <th>材料</th>
+                <th>削除</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in ingredients %}
+                <tr class="">
+                    <td id="{{ i.id }}-ingredient_name">{{ i.ingredient_name }}</td>
+                    <td id="{{ i.id }}-delete_ingredient">
+                        <a href="{% url 'delete_ingredient' i.id %}"><img src="/static/img/delete.png"
+                                                                          style="max-height:20px"/></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <script type="text/javascript">
+        $(function () {
+            $(".update-category").each(function () {
+                $(this).modalForm({formURL: $(this).data('id')});
+            });
+        });
+    </script>
+{% endblock content %}

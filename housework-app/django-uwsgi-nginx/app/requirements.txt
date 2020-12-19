@@ -1,0 +1,10 @@
+git+https://github.com/miurahr/pykakasi
+Django==3.0.2
+beautifulsoup4==4.8.2
+django-bootstrap-modal-forms==1.5.0
+django-widget-tweaks==1.4.5
+python-dateutil==2.8.1
+django-bulk-update==2.2.0
+selenium==3.141.0
+django-environ==0.4.5
+Pillow==7.2.0

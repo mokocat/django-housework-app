@@ -1,0 +1,101 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}レシピ一覧{% endblock title %}
+{% block header %}レシピ一覧{% endblock header %}
+{% block content %}
+
+    <!-- Create Recipe Form -->
+    <div class="create_form">
+        <form class="form-row" method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <button id="recipe_create_btn" type="button" class="create-recipe btn save_btn"
+                    data-id="{% url 'create_recipe' %}"><span class="fa fa-pencil">Create Recipe</span></button>
+        </form>
+        <br>
+    </div>
+
+    <div style="display:inline-flex">
+        <!-- Search Recipe by Recipe Name Form -->
+        {% include "recipe_collection/search_recipe_form.html" with url_name='search_recipe_by_recipe_name' placeholder='レシピ名で検索' id_name='recipe_name' %}
+
+        <!-- Search Recipe by Ingredient Form -->
+        {% include "recipe_collection/search_recipe_form.html" with url_name='search_recipe_by_ingredient' placeholder='材料名で検索' id_name='ingredient_name' %}
+
+        <!-- Search Recipe by Category Form -->
+        {% include "recipe_collection/search_recipe_form.html" with url_name='search_recipe_by_category' select='true' id_name='category_name' %}
+    </div>
+
+    {% include "modal_form.html" %}
+
+    <!-- Recipe Collection Table -->
+    {% if all_items %}
+        <table id="recipe-table" class="table table-striped table-borderless text-center tablesorter-bootstrap">
+            <thead>
+            <tr>
+                <th>献立登録</th>
+                <th>レシピ名</th>
+                <th>カテゴリ</th>
+                <th>材料</th>
+                <th>評価</th>
+                <th>備考</th>
+                <th>編集</th>
+                <th>削除</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for i in all_items %}
+                <tr class="">
+                    <td id="{{ i.id }}-register_meal_plan">
+                        <button class="create_meal_plan btn" data-id="{% url 'create_meal_plan_from_recipe' i.pk %}">
+                            <img src="/static/img/meal.png" style="max-height:25px"/></button>
+                    </td>
+                    <td id="{{ i.id }}-recipe_name">
+                        {% if i.recipe_url %}
+                            <a href={{ i.recipe_url }} target="_blank"><span
+                                    class="fa fa-pencil">{{ i.recipe_name }}</span></a>
+                        {% elif i.recipe_file %}
+                            <a href={{ i.recipe_file.url }} target="_blank"><span
+                                    class="fa fa-pencil">{{ i.recipe_name }}</span></a>
+                        {% else %}
+                            {{ i.recipe_name }}
+                        {% endif %}
+                    </td>
+                    <td id="{{ i.id }}-category">
+                        {% for category in i.categories.all %}
+                            {{ category.category_name }}
+                        {% endfor %}
+                    </td>
+                    <td id="{{ i.id }}-ingredient">
+                        {% for ingredient in i.ingredients.all %}
+                            {{ ingredient.ingredient_name }}
+                        {% endfor %}
+                    </td>
+                    <td id="{{ i.id }}-review">{{ i.review }}</td>
+                    <td id="{{ i.id }}-remark">{{ i.remark }}</td>
+                    <td id="{{ i.id }}-update" class="update-recipe" data-id="{% url 'update_recipe' i.pk %}">
+                        <img src="/static/img/edit.png" style="max-height:20px"/>
+                    </td>
+                    <td id="{{ i.id }}-delete">
+                        <a href="{% url 'delete_recipe' i.id %}"><img src="/static/img/delete.png"
+                                                                      style="max-height:20px"/></a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}
+
+    <script type="text/javascript">
+        {# Open Modal Form #}
+        $(function () {
+            $(".create-recipe, .update-recipe, .create_meal_plan").each(function () {
+                $(this).modalForm({formURL: $(this).data('id')});
+            });
+        });
+
+        {# Table Sorter #}
+        $(document).ready(function () {
+            $('#recipe-table').tablesorter();
+        });
+    </script>
+{% endblock content %}

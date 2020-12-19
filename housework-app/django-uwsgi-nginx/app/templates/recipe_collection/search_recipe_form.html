@@ -1,0 +1,35 @@
+<!-- Search Recipe Form -->
+<div class="search_form">
+    <form class="form-row" action="{% url url_name %}" method="get">
+        {% csrf_token %}
+        <div class="col-auto">
+            {% if select %}
+                <div class="input-group">
+                    <div class="input-group-prepend">
+                        <button type="submit" class="btn"><img src="/static/img/search.png" style="max-height:20px"/>
+                        </button>
+                    </div>
+                    <select class="form-control mr-sm-2" id="exampleFormControlSelect1" name="name">
+                        {% for category in form %}
+                            <option>
+                                {{ category.category_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            {% else %}
+                <label class="sr-only" for="inlineFormInputGroupUsername">{{ placeholder }}</label>
+                <div id="{{ id_name }}" class="input-group">
+                    <div class="input-group-prepend">
+                        <button id="{{ id_name }}_btn" type="submit" class="btn"><img src="/static/img/search.png"
+                                                                                      style="max-height:20px"/>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control" id="inlineFormInputGroupUsername" aria-label="Search"
+                           name="name" autocomplete="off" placeholder={{ placeholder }}>
+                </div>
+            {% endif %}
+        </div>
+    </form>
+    <br>
+</div>

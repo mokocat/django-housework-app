@@ -1,0 +1,5 @@
+# If you are using PyCharm #
+.idea
+
+# logs
+housework-app/logs/*

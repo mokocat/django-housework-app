@@ -1,0 +1,198 @@
+[
+  {
+    "model": "auth.user",
+    "pk": 1,
+    "fields": {
+      "password": "pbkdf2_sha256$180000$lxh2UzbguKxe$cWKIWbTicMAFI9RCBsUjUtgdhWSH3nRGaH8FSMvIe2o=",
+      "last_login": "2020-06-01T06:59:00.385Z",
+      "is_superuser": false,
+      "username": "guest1",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2020-06-01T06:25:05.617Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "auth.user",
+    "pk": 2,
+    "fields": {
+      "password": "pbkdf2_sha256$180000$irOniNQC3CiV$lWQzXTjEKWQqcx2Qygrl22liLMWNs43RYHJLpHOGK4I=",
+      "last_login": "2020-06-01T06:25:31.905Z",
+      "is_superuser": false,
+      "username": "guest2",
+      "first_name": "",
+      "last_name": "",
+      "email": "",
+      "is_staff": false,
+      "is_active": true,
+      "date_joined": "2020-06-01T06:25:22.499Z",
+      "groups": [],
+      "user_permissions": []
+    }
+  },
+  {
+    "model": "todo.recipecategory",
+    "pk": 1,
+    "fields": {
+      "category_name": "Category2",
+      "priority": 1,
+      "user": 2
+    }
+  },
+  {
+    "model": "todo.recipecategory",
+    "pk": 2,
+    "fields": {
+      "category_name": "Category1",
+      "priority": null,
+      "user": 1
+    }
+  },
+  {
+    "model": "todo.ingredient",
+    "pk": 1,
+    "fields": {
+      "ingredient_name": "Ingredient2",
+      "ingredient_name_romaji": "Ingredient2",
+      "user": 2
+    }
+  },
+  {
+    "model": "todo.ingredient",
+    "pk": 2,
+    "fields": {
+      "ingredient_name": "Ingredient1",
+      "ingredient_name_romaji": "Ingredient1",
+      "user": 1
+    }
+  },
+  {
+    "model": "todo.recipe",
+    "pk": 1,
+    "fields": {
+      "recipe_name": "Recipe2",
+      "recipe_name_romaji": "Recipe2",
+      "recipe_file": "",
+      "recipe_url": "",
+      "remark": "memo2",
+      "review": 3,
+      "user": 2,
+      "categories": [
+        1
+      ],
+      "ingredients": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "todo.recipe",
+    "pk": 2,
+    "fields": {
+      "recipe_name": "Recipe1",
+      "recipe_name_romaji": "Recipe1",
+      "recipe_file": "",
+      "recipe_url": "test_url",
+      "remark": "",
+      "review": 3,
+      "user": 1,
+      "categories": [
+        2
+      ],
+      "ingredients": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "todo.mealplan",
+    "pk": 1,
+    "fields": {
+      "recipe": null,
+      "meal_plan_name": "Meal2",
+      "meal_plan_date": "2020-06-01",
+      "user": 2,
+      "categories": [
+        1
+      ]
+    }
+  },
+  {
+    "model": "todo.mealplan",
+    "pk": 2,
+    "fields": {
+      "recipe": null,
+      "meal_plan_name": "Meal1",
+      "meal_plan_date": "2020-06-01",
+      "user": 1,
+      "categories": [
+        2
+      ]
+    }
+  },
+  {
+    "model": "todo.shop",
+    "pk": 1,
+    "fields": {
+      "shop_name": "Shop2",
+      "user": 2
+    }
+  },
+  {
+    "model": "todo.shop",
+    "pk": 2,
+    "fields": {
+      "shop_name": "Shop1",
+      "user": 1
+    }
+  },
+  {
+    "model": "todo.shoppingitempicture",
+    "pk": 1,
+    "fields": {
+      "shopping_item_picture_name": "Picture2",
+      "shopping_item_picture_name_romaji": "Picture2",
+      "picture": "todo/fixture/pic.png",
+      "user": 2
+    }
+  },
+  {
+    "model": "todo.shoppingitempicture",
+    "pk": 2,
+    "fields": {
+      "shopping_item_picture_name": "Picture1",
+      "shopping_item_picture_name_romaji": "Picture1",
+      "picture": "todo/fixture/pic.png",
+      "user": 1
+    }
+  },
+  {
+    "model": "todo.shoppingitem",
+    "pk": 1,
+    "fields": {
+      "item": "Item2",
+      "completed": false,
+      "shopping_item_date": "2020-06-01",
+      "shop": 1,
+      "shopping_item_picture": 1,
+      "user": 2
+    }
+  },
+  {
+    "model": "todo.shoppingitem",
+    "pk": 2,
+    "fields": {
+      "item": "Item1",
+      "completed": false,
+      "shopping_item_date": "2020-06-01",
+      "shop": 2,
+      "shopping_item_picture": 2,
+      "user": 1
+    }
+  }
+]
