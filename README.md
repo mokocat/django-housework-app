@@ -3,17 +3,6 @@
 - This is a web application for management your housework !
 - This app is simple CRUD app (partially used Ajax) packaged with django-uwsgi-nginx-https docker image.
 - You can soon run and develop your own web app based on this package.
- 
-# DEMO
- 
-## please access to the following demo app page !
-- https://housework.mokocat.com/app/
-* This page is subject to be inaccessible or change without notice.
-
-## Usage
-1. Access to [signup page](https://housework.mokocat.com/app/signup/).
-1. Access to [login page](https://housework.mokocat.com/accounts/login/) and input your username and password.
-1. Register [recipe category](https://housework.mokocat.com/app/recipe_collection/show_recipe_category_and_ingredient/). (meal plan was shown by this category orderd by the registered priority.)
 
 # Features
  
