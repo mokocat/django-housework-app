@@ -121,7 +121,7 @@
 - At the moment, only the Japanese version is available.
  
 # Author
-- mokocat
+- pawami
  
 # License
 "Housework-management-app" is under [GPL license](https://www.gnu.org/).
